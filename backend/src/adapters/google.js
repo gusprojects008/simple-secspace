@@ -1,5 +1,4 @@
-const axios = require('axios');
-import userRepository from '../repositories//user';
+import axios from 'axios';
 
 export function getAuthUrl() {
   const params = {
@@ -34,3 +33,10 @@ export async function handleCallback(code) {
   const username = profileRes.data.name;
   return {googleId, email, emailVerified, username};
 };
+
+const googleAdapter = {
+  getAuthUrl, 
+  handleCallback
+};
+
+export {googleAdapter};

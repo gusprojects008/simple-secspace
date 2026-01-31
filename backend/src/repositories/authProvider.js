@@ -1,7 +1,7 @@
-import db from "../adpaters/db";
+import db from "../adapters/db.js";
 
-export async function findByProviderUserId(provider, providerUserId) {
-  const {rows} = await db.query(
+async function findByProviderUserId(provider, providerUserId) {
+  const result = await db.query(
     `
     SELECT *
     FROM auth_providers
@@ -11,17 +11,17 @@ export async function findByProviderUserId(provider, providerUserId) {
     [provider, providerUserId]
   );
 
-  return rows[0] || null;
+  return result;
 }
 
-export async function markEmailAsVerified(provider, providerUserId, emailVerified) {
+async function markEmailAsVerified(provider, providerUserId, emailVerified) {
   if (!emailVerified) return;
 
   await db.query(
     `
     UPDATE auth_providers
     SET email_verified = true,
-        update_at = NOW()
+        updated_at = NOW()
     WHERE provider = $1
       AND provider_user_id = $2
     `,
@@ -29,8 +29,8 @@ export async function markEmailAsVerified(provider, providerUserId, emailVerifie
   );
 }
 
-export async function create(userId, provider, providerUserId, emailVerified) {
-  const {rows} = await db.query(
+async function create(userId, provider, providerUserId, emailVerified) {
+  const result = await db.query(
     `
     INSERT INTO auth_providers (
       user_id,
@@ -44,5 +44,14 @@ export async function create(userId, provider, providerUserId, emailVerified) {
     [userId, provider, providerUserId, emailVerified]
   );
 
-  return rows[0];
+  return result.rows[0];
 }
+
+const authProviderRepository = {
+  findByProviderUserId,
+  markEmailAsVerified,
+  create
+};
+
+export {authProviderRepository};
+

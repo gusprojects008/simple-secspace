@@ -1,6 +1,6 @@
-import {response} from './http';
+import {http} from './http.js';
 
-export const ErrorCodes = {
+const ErrorCodes = {
   RESOURCE_ALREADY_EXISTS: 'RESOURCE_ALREADY_EXISTS',
   RESOURCE_NOT_FOUND: 'RESOURCE_NOT_FOUND',
   RESOURCE_CREATION_FAILED: 'RESOURCE_CREATION_FAILED',
@@ -12,12 +12,20 @@ export const ErrorCodes = {
   VALIDATION_ERROR: 'VALIDATION_ERROR',
 };
 
-export async function error(message = null, code) {
+async function error(message = null, code) {
   const err = new Error(message);
   err.code = code;
   throw err; 
 };
 
-export async function serverError(code, message = null, data = null) {
+async function serverError(code, message = null, data = null) {
   response(res, 'INTERNAL_SERVER_ERROR', code, message, data);
 };
+
+const errors = {
+  ErrorCodes,
+  error,
+  serverError
+};
+
+export {errors};

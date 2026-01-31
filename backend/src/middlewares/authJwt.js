@@ -1,9 +1,9 @@
-const jwt = require('jsonwebtoken');
-const {ReasonPhrases, StatusCodes} = require('http-status-codes');
+import jwt from 'jsonwebtoken';
+import {http} from '../utils/http.js';
 
-function authJwt(req, res, next) {
+export default async function authJwt(req, res, next) {
   const auth = req.header.authorization;
-  const errorResponse = res.status(StatusCodes.UNAUTHORIZED).redirect('/login');
+  const errorResponse = http.response(res, 'UNAUTHORIZED');
   if (!auth) {
     return errorResponse;
   };
@@ -16,5 +16,3 @@ function authJwt(req, res, next) {
     errorResponse;
   };
 };
-
-module.exports = authJwt;

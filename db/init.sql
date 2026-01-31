@@ -4,7 +4,7 @@ CREATE TABLE users (
   email VARCHAR(100) UNIQUE NOT NULL,
   password_hash VARCHAR(255),
   email_verified BOOLEAN DEFAULT false,
-  update_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -15,7 +15,7 @@ CREATE TABLE auth_providers (
   provider_user_id VARCHAR(100) NOT NULL,
   email_verified BOOLEAN DEFAULT false,
   created_at TIMESTAMPTZ DEFAULT NOW(),
-  update_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
   UNIQUE(provider, provider_user_id)
 );
 

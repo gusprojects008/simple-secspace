@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import {TOKEN_EXPIRES_IN} from './constants';
+import {constants} from './constants.js';
 
 export async function hashPassword(password) {
   return bcrypt.hash(password, 10);
@@ -14,3 +14,11 @@ export async function generateToken(user) {
     {id: user.id, email: user.email}, process.env.JWT_SECRET, {expiresIn: TOKEN_EXPIRES_IN}
   );
 };
+
+const security = {
+  hashPassword,
+  verifyPassword,
+  generateToken
+};
+
+export {security};
