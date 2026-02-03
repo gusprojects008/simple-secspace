@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; /*
+import React, {useState} from 'react'; /*
 'useState' is a conventional name. `useState` is a function that acts as a hook, managing the component's state, and when the state changes, the event triggers a state update. 'react' is the name of the package in Node.js.
 */
 import styles from "../styles/login.module.css";
@@ -25,12 +25,13 @@ parts of the real DOM. setEmail can receive a callback that allows calculating t
       body: JSON.stringify({username, email, password})
     });
 
-    const data = await res;
+    const data = await res.json();
 
     if (!res.ok) {
       console.error(data);
       return;
     };
+
     console.log('User created', data);
   };
 
@@ -51,7 +52,7 @@ parts of the real DOM. setEmail can receive a callback that allows calculating t
       return;
     };
     console.log(`Res ${res}\nResult ${result}`);
-    window.location.href = result.data;
+    window.location.href = '/';
   };
 
   /* value is the parameter passed to the input; it receives the value associated with the username variable, which stores the current state of the component.

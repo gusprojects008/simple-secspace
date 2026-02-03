@@ -5,7 +5,7 @@ const authRouter = express.Router();
 
 authRouter.post('/login', authController.login);
 authRouter.post('/register', authController.register);
-authRouter.get('/login/google', authController.googleLogin);
-authRouter.get('/login/google/callback', authController.googleCallback)
+authRouter.get('/login/:provider', authController.oauthLogin);
+authRouter.get('/login/:provider/callback', authController.oauthCallback)
 
 export default authRouter;

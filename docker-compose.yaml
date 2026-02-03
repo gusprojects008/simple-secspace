@@ -10,7 +10,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - postgres_data:/var/lib/potgresql/data
+      - postgres_data:/var/lib/postgresql/data
     ports:
       - "1024:5432"
 
@@ -44,13 +44,8 @@ services:
     restart: always
     ports:
       - "1027:1027"
-    volumes:
-      - ./frontend:/usr/src/app
-      - /usr/src/app/.next
-      - /usr/src/app/node_modules
-      - ./backend/src/utils/errors.js:/usr/src/app/utils/shared-errors.js:ro
     environment:
-      - NEXT_PUBLIC_API_URL=${API_URL}
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
     depends_on:
       - backend
 

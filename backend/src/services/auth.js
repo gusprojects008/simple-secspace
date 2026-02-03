@@ -1,19 +1,24 @@
 import {userRepository} from '../repositories/user.js';
+import {authProviderRepository} from '../repositories/authProvider.js';
 import {errors} from '../utils/errors.js';
 import {security} from '../utils/security.js';
 
 const {
   RESOURCE_ALREADY_EXISTS,
   RESOURCE_NOT_FOUND,
+  RESOURCE_INVALID,
   INVALID_CREDENTIALS
 } = errors.ErrorCodes;
+
+const {error} = errors; 
+
+const {hashPassword, verifyPassword, generateToken} = security;
 
 async function register(username, email, password) {
   const userExists = await userRepository.findByEmail(email);
   if (userExists) {
-    error(RESOURCE_ALREADY_EXISTS);
+    error(RESOURCE_ALREADY_EXISTS, null);
   }
-
   const passwordHash = await hashPassword(password);
   const result = await userRepository.create(username, email, passwordHash);
   return result;
@@ -30,7 +35,7 @@ async function login(email, password) {
     error(INVALID_CREDENTIALS);
   }
 
-  const token = generateToken(user);
+  const token = await generateToken(user);
   return {user, token};
 }
 
@@ -38,17 +43,24 @@ async function loginWithProvider({
   provider,
   providerUserId,
   email,
-  emailVerified,
+  verifiedEmail,
   username
 }) {
-  const existingProvider =
-    await authProviderRepository.findByProviderUserId(
-      provider,
-      providerUserId
-    );
+  console.log({
+    provider,
+    providerUserId,
+    email,
+    verifiedEmail,
+    username
+  });
+
+  const existingProvider = await authProviderRepository.findByProviderUserId(
+    provider,
+    providerUserId
+  );
 
   if (existingProvider) {
-    if (emailVerified && !existingProvider.email_verified) {
+    if (verifiedEmail && !existingProvider.verified_email) {
       await authProviderRepository.markEmailAsVerified(
         provider,
         providerUserId,
@@ -56,9 +68,19 @@ async function loginWithProvider({
       );
     }
 
-    const user = await userRepository.findById(existingProvider.user_id);
-    const token = generateToken(user);
-    return { user, token };
+    let user = await userRepository.findById(existingProvider.user_id);
+
+    if (!user) {
+      user = await userRepository.findByEmail(email);
+      if (!user) {
+        user = await userRepository.create(username, email, null);
+      };
+      await authProviderRepository.updateUserId(provider, providerUserId, user.id);
+    };
+
+    const token = await generateToken(user);
+    console.log('log 1', `${token}\n${user}`);
+    return {user, token};
   }
 
   let user = await userRepository.findByEmail(email);
@@ -75,11 +97,12 @@ async function loginWithProvider({
     user.id,
     provider,
     providerUserId,
-    emailVerified
+    verifiedEmail
   );
 
-  const token = generateToken(user);
-  return { user, token };
+  const token = await generateToken(user);
+  console.log('log 2', `${token}\n${user}`);
+  return {user, token};
 }
 
 const authService = {

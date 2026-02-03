@@ -10,4 +10,5 @@ const pool = new Pool({ // Instance
   password: process.env.POSTGRES_PASSWORD,
   port: process.env.DB_PORT,
 });
-export const query = async (text, params) => pool.query(text, params); // Exporting the pool object to make it accessible by other modules
+const query = async (text, params) => pool.query(text, params); // Exporting the pool object to make it accessible by other modules
+export default {query};

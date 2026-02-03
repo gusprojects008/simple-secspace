@@ -9,7 +9,24 @@ import authJwt from './middlewares/authJwt.js';
 const PORT = process.env.PORT;
 const app = express();
 
-app.use(cors());
+const allowedOrigins = [
+  'http://127.0.0.1'
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+    if (
+      allowedOrigins.includes(origin) ||
+      origin.endsWith('.trycloudflare.com')
+    ) {
+      return callback(null, true);
+    }
+    return callback(new Error('Not allowed by CORS'));
+  },
+  credentials: true
+}));
+
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,

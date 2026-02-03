@@ -6,20 +6,22 @@ const ErrorCodes = {
   RESOURCE_CREATION_FAILED: 'RESOURCE_CREATION_FAILED',
   RESOURCE_UPDATE_FAILED: 'RESOURCE_UPDATE_FAILED',
   RESOURCE_DELETION_FAILED: 'RESOURCE_DELETION_FAILED',
+  RESOURCE_NOT_SUPPORTED: 'RESOURCE_NOT_SUPPORTED',
+  RESOURCE_INVALID: 'RESOURCE_INVALID',
   DATABASE_ERROR: 'DATABASE_ERROR',
   INVALID_CREDENTIALS: 'INVALID_CREDENTIALS',
   TOKEN_EXPIRED: 'TOKEN_EXPIRED',
   VALIDATION_ERROR: 'VALIDATION_ERROR',
 };
 
-async function error(message = null, code) {
+function error(code, message = null, data = null) {
   const err = new Error(message);
   err.code = code;
   throw err; 
 };
 
-async function serverError(code, message = null, data = null) {
-  response(res, 'INTERNAL_SERVER_ERROR', code, message, data);
+async function serverError(res, code, message = null, data = null) {
+  http.response(res, 'INTERNAL_SERVER_ERROR', code, message, data);
 };
 
 const errors = {

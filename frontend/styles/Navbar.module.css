@@ -7,27 +7,20 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 2rem;
-  background-color: black;
-  color: black;
-  z-index: 1;
-}
-
-.logo {
-  font-size: 1.5rem;
+  background-color: var(--bg-secondary); /* Usa variável do tema */
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-main);
+  z-index: 100;
 }
 
 .links a {
-  font-size: 1.4rem;
+  font-size: 1.1rem;
   margin-left: 1.5rem;
   text-decoration: none;
-  color: green;
-  transition: transform 0.2s ease-in-out;
+  color: var(--text-main);
+  transition: color 0.2s;
 }
 
 .links a:hover {
-  transform: scale(1.05);
-}
-
-.active {
-  border-bottom: 2px solid darkblue;
+  color: var(--accent);
 }

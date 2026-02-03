@@ -9,7 +9,7 @@ export function ThemeProvider({children}) {
   };
   return (
     <ThemeContext.Provider value={{theme, toggleTheme}}>
-      <div data-theme={theme}>{children}</div>
+      <div data-theme={theme} className="main-wrapper">{children}</div>
     </ThemeContext.Provider>
   );
 };
