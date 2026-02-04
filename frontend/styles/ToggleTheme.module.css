@@ -1,11 +1,25 @@
 .toggle_theme {
+  position: fixed;
+  top: 1.25rem;
+  right: 1.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: fixed;
-  z-index: 2;
-  top: 10%;
-  left: 90%;
+  z-index: 3;
+  background: transparent;
   border: none;
-  background: none;
+  cursor: pointer;
+}
+
+.toggle_theme:hover {
+  transform: scale(1.05);
+}
+
+.toggle_theme:active {
+  transform: scale(0.95);
+}
+
+.toggle_theme:focus-visible {
+  outline: 2px solid var(--title);
+  outline-offset: 2px;
 }

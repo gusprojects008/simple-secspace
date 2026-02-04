@@ -36,6 +36,7 @@ app.use(session({
 app.use(express.json());
 app.use('/auth', authRouter);
 app.use('/comments', authJwt, commentRouter); 
+app.use('/forum', authJwt); 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Running: ${PORT}`);
 });

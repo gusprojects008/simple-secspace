@@ -13,17 +13,15 @@ export async function response(res, status_key, code = null, message = null, dat
 export async function createAuthCookie(
   res,
   token,
-  httpOnly = true,
-  secure = process.env.NODE_ENV === 'production',
-  sameSite = 'strict',
   maxAge = constants.TOKEN_EXPIRES_IN * 1000
 ) {
-  res.cookie('token', token, {
-    httpOnly,
-    secure,
-    sameSite,
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    path: "/",
     maxAge
-  });
+  })
 }
 
 const http = {response, createAuthCookie};

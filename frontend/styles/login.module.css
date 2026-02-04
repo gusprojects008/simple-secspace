@@ -1,3 +1,113 @@
-.container {
-  background-color: green;
+.loginContainer {
+  padding: 4rem;
 }
+
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.login {
+  max-width: 420px;
+  padding: 2rem;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.title {
+  margin-bottom: 0.5rem;
+  text-align: center;
+  color: var(--title);
+}
+
+.input {
+  padding: 0.75rem 0.9rem;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-secondary);
+  color: var(--text-muted);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--title);
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.primary {
+  flex: 1;
+  padding: 0.7rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background-color: var(--title);
+  color: #000;
+  font-weight: 600;
+}
+
+.secondary {
+  flex: 1;
+  padding: 0.7rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background-color: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.primary:hover,
+.secondary:hover {
+  opacity: 0.9;
+}
+
+.oauth {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--title);
+  text-decoration: none;
+}
+
+.oauth:hover {
+  text-decoration: underline;
+}
+
+.feedback {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.success {
+  background: rgba(0, 255, 65, 0.1);
+  color: #00ff41;
+}
+
+.error {
+  background: rgba(255, 0, 0, 0.1);
+  color: #ff4d4d;
+}
+
+.loading {
+  background: rgba(0, 112, 243, 0.1);
+  color: #0070f3;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+

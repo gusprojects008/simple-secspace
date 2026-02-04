@@ -75,7 +75,7 @@ async function oauthCallback(req, res) {
 
     req.session.userId = user.id;
     http.createAuthCookie(res, token);
-    res.redirect('/');
+    res.redirect('/forum');
   } catch (err) {
     console.log(err);
     errors.serverError(res, DATABASE_ERROR, null, err);
