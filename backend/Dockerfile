@@ -1,7 +1,20 @@
 FROM node:18-alpine
-WORKDIR /usr/src/app
-COPY package*.json ./
-RUN npm install
+
+WORKDIR /app
+
+COPY package*.json pnpm-lock.yaml ./
+
+RUN npm install -g pnpm
+
 COPY . .
+
+ENV CI=true
+
+RUN pnpm install --filter ./backend...
+
+WORKDIR /app/backend
+
 EXPOSE 1026
-CMD ["npm", "start"]
+
+CMD ["pnpm", "run", "dev"]
+

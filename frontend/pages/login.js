@@ -3,18 +3,19 @@ import React, {useState} from 'react'; /*
 */
 import Link from 'next/link';
 import styles from '../styles/login.module.css';
+import {errors} from '@secspace/shared';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL; // We store the value of the environment variable that next.js read from the node.js process environment variables during the build; next.js only reads variables that begin with NEXT_PUBLIC.
 
 export default function LoginPage() { // It defines this as a React Page component because it's located in the "/pages" directory. If it were in "/app", it would be a route component.
-  const [status, setStatus] = useState('idle')
-  const [message, setMessage] = useState('')
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState(''); /* 'email' is the component's state value. setEmail is a standard function returned by useState, used
  to update the component's state. React internally re-executes the component's function, reconciles the virtual DOM, and updates the necessary 
 parts of the real DOM. setEmail can receive a callback that allows calculating the component's current state based on its previous state.
   */
   const [password, setPassword] = useState('');
-  const [username, setUsername] = useState('');
+  const [status, setStatus] = useState('idle')
+  const [message, setMessage] = useState('')
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -29,6 +30,7 @@ parts of the real DOM. setEmail can receive a callback that allows calculating t
       });
   
       const data = await res.json();
+      console.log(data);
   
       if (!res.ok) {
         setStatus('error');

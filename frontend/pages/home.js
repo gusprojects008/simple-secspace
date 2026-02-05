@@ -34,9 +34,9 @@ export default function Home() {
               Um aspecto interessante da coleta de informações é que, em alguns casos, foram encontradas informações sensíveis sobre empresas em lixos próximos ao local, como <b><q>SSDs, HDs, computadores usados ou celulares descartados</q></b>. Essa etapa é extremamente importante — e, muitas vezes, a mais complexa.
           </p>
 
-          <h2>Anonimato e Ataque:</h2>
+          <h2>Ataques</h2>
           <p>
-              Este é o momento em que você utiliza as informações coletadas e inicia a invasão. Porém, antes de tudo, é altamente recomendável manter-se <b>ANÔNIMO</b>. Existem várias formas de realizar a invasão, dependendo dos dados coletados e das vulnerabilidades identificadas...
+              Este é o momento em que você utiliza as informações coletadas e inicia o teste de penetração, dependendo do contrato realizado com a pessoa ou empresa, o anonimato pode ser necessário para simular ataques reais realizados por invasores.
           </p>
 
           <h2>Controle e Escalonamento de Privilégios:</h2>

@@ -1,5 +1,3 @@
-import {http} from './http.js';
-
 const ErrorCodes = {
   RESOURCE_ALREADY_EXISTS: 'RESOURCE_ALREADY_EXISTS',
   RESOURCE_NOT_FOUND: 'RESOURCE_NOT_FOUND',
@@ -12,16 +10,18 @@ const ErrorCodes = {
   CREDENTIALS_INVALID: 'CREDENTIALS_INVALID',
   TOKEN_INVALID: 'TOKEN_INVALID',
   VALIDATION_ERROR: 'VALIDATION_ERROR',
+  CORS_ERROR: 'CORS_ERROR'
 };
 
 function error(code, message = null, data = null) {
   const err = new Error(message);
   err.code = code;
+  err.data = data;
   throw err; 
 };
 
 async function serverError(res, code, message = null, data = null) {
-  http.response(res, 'INTERNAL_SERVER_ERROR', code, message, data);
+  res.status(500).json({code, message, data});
 };
 
 const errors = {

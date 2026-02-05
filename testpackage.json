@@ -1,9 +1,0 @@
-{
-  "name": "secspace",
-  "private": true,
-  "workspaces": [
-    "backend",
-    "frontend",
-    "shared"
-  ]
-}

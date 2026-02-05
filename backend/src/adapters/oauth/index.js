@@ -1,5 +1,5 @@
 import * as google from './google.js';
-import {errors} from '../../utils/errors.js';
+import {errors} from '@secspace/shared';
 
 const providers = {
   google

@@ -1,5 +1,5 @@
 import {commentRepository} from '../repositories/comment.js';
-import {errors} from '../utils/errors.js';
+import {errors} from '@secspace/shared';
 
 const {
   RESOURCE_NOT_FOUND,

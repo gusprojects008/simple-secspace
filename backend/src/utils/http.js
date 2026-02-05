@@ -3,11 +3,7 @@ import {constants} from './constants.js';
 
 export async function response(res, status_key, code = null, message = null, data = null) {
   const status_code = StatusCodes[status_key] || StatusCodes.INTERNAL_SERVER_ERROR;
-  res.status(status_code).json({
-    code: code,
-    message: message,
-    data: data,
-  });
+  res.status(status_code).json({code, message, data});
 };
 
 export async function createAuthCookie(

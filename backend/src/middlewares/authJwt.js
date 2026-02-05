@@ -1,18 +1,17 @@
 import jwt from 'jsonwebtoken';
 import {http} from '../utils/http.js';
-import {errors} from '../utils/errors.js';
+import {errors} from '@secspace/shared';
 
 export default async function authJwt(req, res, next) {
-  const auth = req.headers.authorization;
+  const auth = req.cookies?.token;
+  console.log(auth);
 
   if (!auth) {
     return http.response(res, 'UNAUTHORIZED', errors.TOKEN_INVALID); 
   }
 
-  const token = auth.split(" ")[1]
-
   try {
-    const payload = jwt.verify(token, process.env.JWT_SECRET)
+    const payload = jwt.verify(auth, process.env.JWT_SECRET)
     req.user = payload
     return next()
   } catch {

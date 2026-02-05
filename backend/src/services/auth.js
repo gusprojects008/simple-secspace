@@ -1,7 +1,7 @@
 import {userRepository} from '../repositories/user.js';
 import {authProviderRepository} from '../repositories/authProvider.js';
-import {errors} from '../utils/errors.js';
 import {security} from '../utils/security.js';
+import {errors} from '@secspace/shared';
 
 const {
   RESOURCE_ALREADY_EXISTS,
@@ -17,7 +17,7 @@ const {hashPassword, verifyPassword, generateToken} = security;
 async function register(username, email, password) {
   const userExists = await userRepository.findByEmail(email);
   if (userExists) {
-    error(RESOURCE_ALREADY_EXISTS, null);
+    error(RESOURCE_ALREADY_EXISTS);
   }
   const passwordHash = await hashPassword(password);
   const result = await userRepository.create(username, email, passwordHash);
