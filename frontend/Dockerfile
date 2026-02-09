@@ -1,14 +1,11 @@
 FROM node:20-bullseye
-
 WORKDIR /app
-COPY package*.json pnpm-lock.yaml ./
 RUN npm install -g pnpm
-
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY frontend/package.json frontend/package.json
+COPY packages packages
+RUN pnpm install --filter ./frontend... 
 COPY . .
-
 WORKDIR /app/frontend
-RUN pnpm install --filter ./frontend...
-
 EXPOSE 1027
-CMD ["npm", "run", "dev"]
-
+CMD ["pnpm", "run", "dev"]

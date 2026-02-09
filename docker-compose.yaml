@@ -12,13 +12,13 @@ services:
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
       - postgres_data:/var/lib/postgresql/data
     ports:
-      - "1024:5432"
+      - "5432:5432" # It is not advisable to set 1024 (1024:5432) as the port for the host, even if only for semantic purposes, as this allows any process on the host to communicate with the database
 
   cache:
     image: redis:alpine
     restart: always
     ports:
-      - "1025:6379"
+      - "6379:6379"
 
   backend:
     build:
@@ -32,8 +32,8 @@ services:
     depends_on:
       - db
       - cache
-    volumes:
-      - ./backend:/app/backend:cached
+  #  volumes:
+   #   - ./backend:/app/backend:cached
     command: pnpm run dev
 
   frontend:
@@ -47,6 +47,9 @@ services:
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
     depends_on:
       - backend
+#    volumes:
+ #     - ./frontend:/app/frontend:cached
+    command: pnpm run dev
 
   reverse-proxy:
     image: nginx:latest
@@ -60,4 +63,6 @@ services:
       - ./reverse-proxy/default.conf:/etc/nginx/conf.d/default.conf
 
 volumes:
-  postgres_data:
+  postgres_data: # This defines a volume created and named by Docker, which will be created and managed by dockerd.
+  # It will be stored on the host (outside the project), but accessed and used by containers that communicate with the local database service "db".
+  # In this way, the data in the volume is stored persistently, and any container can mount the volume internally and access its data directly. 

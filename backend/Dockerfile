@@ -1,20 +1,12 @@
 FROM node:18-alpine
-
 WORKDIR /app
-
-COPY package*.json pnpm-lock.yaml ./
-
 RUN npm install -g pnpm
-
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY backend/package.json backend/package.json
+COPY packages packages
+# The operator "..." indicates that pnpm should install all pending items from the backend package and all packages it depends on, recursively
+RUN pnpm install --filter ./backend... 
 COPY . .
-
-ENV CI=true
-
-RUN pnpm install --filter ./backend...
-
 WORKDIR /app/backend
-
 EXPOSE 1026
-
 CMD ["pnpm", "run", "dev"]
-

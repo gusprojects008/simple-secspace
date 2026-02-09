@@ -58,7 +58,7 @@ async function update(req, res) {
     if (err.code === RESOURCE_UPDATE_FAILED) {
       return http.response(res, 'UNPROCESSABLE_ENTITY', err.code);
     }
-    errors.serverError(res, DATABASE_ERROR);
+    return errors.serverError(res, DATABASE_ERROR);
   }
 }
 

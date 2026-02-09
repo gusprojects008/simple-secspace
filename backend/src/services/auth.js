@@ -79,7 +79,6 @@ async function loginWithProvider({
     };
 
     const token = await generateToken(user);
-    console.log('log 1', `${token}\n${user}`);
     return {user, token};
   }
 
@@ -101,7 +100,6 @@ async function loginWithProvider({
   );
 
   const token = await generateToken(user);
-  console.log('log 2', `${token}\n${user}`);
   return {user, token};
 }
 

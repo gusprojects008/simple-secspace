@@ -32,7 +32,7 @@ async function updateComment(commentId, userId, content) {
   return result;
 }
 
-async function removeComment(commentId, userId) {
+async function deleteComment(commentId, userId) {
   const result = await commentRepository.remove(commentId, userId);
   if (!result) {
     errors.error(RESOURCE_DELETION_FAILED);
@@ -44,7 +44,7 @@ const commentService = {
   listComments,
   createComment,
   updateComment,
-  removeComment
+  deleteComment
 };
 
 export {commentService};

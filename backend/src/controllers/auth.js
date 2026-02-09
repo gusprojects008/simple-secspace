@@ -14,7 +14,7 @@ const {
   VALIDATION_ERROR,
 } = errors.ErrorCodes;
 
-/*async function register(req, res) {
+async function register(req, res) {
   const {username, email, password} = req.body;
   if (!username || !email || !password) {
     return http.response(res, 'BAD_REQUEST', VALIDATION_ERROR);
@@ -28,27 +28,6 @@ const {
       return http.response(res, 'CONFLICT', err.code, err);
     }
     return errors.serverError(res, DATABASE_ERROR);
-  }
-}*/
-
-async function register(req, res) {
-  console.log('=== Register request received ===', req.body);
-
-  try {
-    const { username, email, password } = req.body;
-    if (!username || !email || !password) {
-      console.log('Validation failed');
-      return http.response(res, 'BAD_REQUEST', errors.ErrorCodes.VALIDATION_ERROR);
-    }
-
-    console.log('Calling authService.register...');
-    const user = await authService.register(username, email, password);
-    console.log('User created:', user);
-    return http.response(res, 'CREATED', null, null, user);
-
-  } catch (err) {
-    console.error('Register error caught in controller:', err);
-    return errors.serverError(res, errors.ErrorCodes.DATABASE_ERROR, err.message, err.data);
   }
 }
 
@@ -104,11 +83,20 @@ async function oauthCallback(req, res) {
   }
 }
 
+async function me(req, res) {
+  const user = req.user;
+  if (!user?.id) {
+    return http.response(res, 'BAD_REQUEST');
+  }
+  return http.response(res, 'OK', null, null, user);
+}
+
 const authController = {
   register,
   login,
   oauthLogin,
-  oauthCallback
+  oauthCallback,
+  me
 };
 
 export {authController};

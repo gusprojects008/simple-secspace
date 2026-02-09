@@ -8,13 +8,34 @@ export default function Forum() {
   const [comments, setComments] = useState([]);
   const [status, setStatus] = useState('idle');
   const [message, setMessage] = useState('');
+  const [editingId, setEditingId] = useState(null);
+  const [editingContent, setEditingContent] = useState('');
+  const [currentUser, setCurrentUser] = useState(null);
+  const currentUserId = currentUser?.id;
+
+  useEffect(() => {
+    async function fetchMe() {
+      try {
+        const res = await fetch(`${API_URL}/auth/me`, {
+          credentials: 'include'
+        });
+  
+        if (!res.ok) return;
+  
+        const data = await res.json();
+        setCurrentUser(data.data);
+      } catch (err) {}
+    }
+  
+    fetchMe();
+  }, []);
 
   useEffect(() => {
     let intervalId;
   
     async function fetchComments() {
       try {
-        const res = await fetch(`${API_URL}/comments`, { credentials: 'include' });
+        const res = await fetch(`${API_URL}/comments`, {credentials: 'include'});
         const data = await res.json();
   
         if (!res.ok) return;
@@ -67,6 +88,43 @@ export default function Forum() {
     }
   }
 
+  async function handleUpdate(id) {
+    if (!editingContent.trim()) return;
+  
+    try {
+      const res = await fetch(`${API_URL}/comments/${id}`, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: editingContent })
+      });
+  
+      const data = await res.json();
+  
+      if (!res.ok) return;
+  
+      setComments(prev =>
+        prev.map(c => c.id === id ? { ...c, content: data.data.content } : c)
+      );
+  
+      setEditingId(null);
+      setEditingContent('');
+    } catch (err) {}
+  }
+
+  async function handleDelete(id) {
+    try {
+      const res = await fetch(`${API_URL}/comments/${id}`, {
+        method: 'DELETE',
+        credentials: 'include'
+      });
+  
+      if (!res.ok) return;
+  
+      setComments(prev => prev.filter(c => c.id !== id));
+    } catch (err) {}
+  }
+
   return (
     <div className={`container ${styles.forumContainer}`}>
       <main className={`content ${styles.content}`}>
@@ -92,7 +150,37 @@ export default function Forum() {
           {comments.length === 0 && <p className={styles.empty}>No comments yet</p>}
           {comments.map(c => (
             <article key={c.id} className={styles.commentCard}>
-              {c.content || c.text}
+              {editingId === c.id ? (
+                <>
+                  <textarea
+                    value={editingContent}
+                    onChange={e => setEditingContent(e.target.value)}
+                  />
+                  <button onClick={() => handleUpdate(c.id)}>Save</button>
+                  <button onClick={() => setEditingId(null)}>Cancel</button>
+                </>
+              ) : (
+                <>
+                  <p>{c.content}</p>
+          
+                  {c.user_id === currentUserId && (
+                    <div className={styles.actions}>
+                      <button
+                        onClick={() => {
+                          setEditingId(c.id);
+                          setEditingContent(c.content);
+                        }}
+                      >
+                        Edit
+                      </button>
+          
+                      <button onClick={() => handleDelete(c.id)}>
+                        Delete
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
             </article>
           ))}
         </section>

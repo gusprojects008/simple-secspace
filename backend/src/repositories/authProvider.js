@@ -21,20 +21,22 @@ async function create(userId, provider, providerUserId, verifiedEmail) {
 async function markEmailAsVerified(provider, providerUserId, verifiedEmail) {
   if (!verifiedEmail) return;
 
-  await db.query(
+  const {rows} = await db.query(
     `
     UPDATE auth_providers
     SET verified_email = true,
         updated_at = NOW()
     WHERE provider = $1
       AND provider_user_id = $2
+    RETURNING id, verified_email, updated_at
     `,
     [provider, providerUserId]
   );
+  return rows[0];
 }
 
 async function findByProviderUserId(provider, providerUserId) {
-  const result = await db.query(
+  const {rows} = await db.query(
     `
     SELECT user_id, provider, provider_user_id
     FROM auth_providers
@@ -44,7 +46,7 @@ async function findByProviderUserId(provider, providerUserId) {
     [provider, providerUserId]
   );
 
-  return result;
+  return rows[0];
 }
 
 async function updateUserId(provider, providerUserId, userId) {
@@ -69,4 +71,3 @@ const authProviderRepository = {
 };
 
 export {authProviderRepository};
-

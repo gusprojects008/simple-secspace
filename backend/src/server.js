@@ -42,11 +42,3 @@ app.use('/comments', authJwt, commentRouter);
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Running: ${PORT}`);
 });
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('Unhandled Rejection:', reason);
-});
-
-process.on('uncaughtException', (err) => {
-  console.error('Uncaught Exception:', err);
-});
-

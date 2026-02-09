@@ -8,13 +8,13 @@ async function create(username, email, passwordHash) {
 };
 
 async function findByEmail(email) {
-  const result = await db.query('SELECT id, username, email, password_hash FROM users WHERE email = $1', [email]);
-  return result.rows[0];
+  const {rows} = await db.query('SELECT id, username, email, password_hash FROM users WHERE email = $1', [email]);
+  return rows[0];
 };
 
 async function findById(userId) {
-  const result = await db.query('SELECT id, username, email, password_hash FROM users WHERE id = $1', [userId]);
-  return result.rows[0];
+  const {rows} = await db.query('SELECT id, username, email, password_hash FROM users WHERE id = $1', [userId]);
+  return rows[0];
 };
 
 const userRepository = {
