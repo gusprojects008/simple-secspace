@@ -1,0 +1,56 @@
+Se o usuário for autênticado, ele poderá fazer comentários. Esses comentários poderão ser deletados, atualizados, e outros comentários também poderão ser feitos.
+Futuramente implementar função de esqueceu senha com troca autênticação OTP via email ou número de telefone, e autênticação multi fatores.
+Implementar opção de excluir conta, salvar sessão ou não (se o usuário que gerar token jwt para autênticação ou não).
+Implementar painel de login de admin.
+Implementar área para informar os colaborados, mostrando o nome deles e se eles estão registrados ou não.
+Implementar captcha local, e testar se ele está funcionanado através de um script de simulação de ataque.
+Utilizar ou avisar na documentação que é recomendado o uso de passport.js para realizar a orquestração de estratégias de autênticação. 
+Opção para logout (excluir cookie JWT).
+Adicionar verificação OTP por email.
+Adicionar aviso de privacidade antes de se logar com o google, avisar que implementamos o login com o google apenas por conveniência.
+mudar o nome secspace ou secforum.
+criar menu lateral para o usuário.
+criar página para produtos.
+criar funcionalidade para o usuário publicar um tópico, e os usuário poderem discutirem sobre ele através de comentários.
+Lembrar que posso analisar o error do banco, e retornar um code específico de acordo com ele. E então verificar esse code no controller, para retornar o code correto para o frontend.
+Lembrar que o desenvolvedor pode ajustar as funções que recebem "email_verified" de acordo com o método e quando a verificação de email ocorrerá.
+Lembrar que ainda é necessário melhorar o handlerCallback do googleService.
+Poderia haver um controller individual apenas para authProviders.
+Definir comando para inciar o server no CMD no Dockerfile caso a imagem seja usada fora do docker compose.
+Mudar o nome desse projeto para simples-secspace, e criar um secspace real para produção baseado nesse projeto já existente.
+
+
+Passo a passo que estou seguindo, e detalhes importantes que aprendi e que quero registrar:
+Aplicações web modernas utilizam múltiplos containers para compor toda a aplicação, ou seja, o frontend, backend, banco de dados, servidor e serviços auxiliares (redis para caches e filas), cada um deles podem estar em um container específico e separado. E para realizar a execução de todos eles, de forma sincronizada e separada, é utilizado um arquivo chamado docker compose, que será utilizado pela função compose do docker, chamada por meio do comando docker compose up, o compose do docker é um orquestrador de containers, ele simples e usado localmente em ambientes de desenvolvimento. Em produção são utilizados outros orquestradores mais robustos e completos, como o docker swarm para aplicações de médio porte, e kubernetes para aplicações de grande porte.
+backend e frontend utilizam build como container, já containers de bancos de dados, serviços auxiliares e servidores utilizam imagens feitas para o serviço específico.
+O redis é um é um banco de dados em memória volátil (RAM), ele estrutura os dados de forma não relaciona, utilzando NoSQL, ou seja, os dados são estruturados no formato hashmap (chave-valor). O redis é utilizado para armazenar dados que sempre são consultados e utilizados por aplicações ou usuário, ou seja, ele age como um cache para servir dados rápidamente, ele também pode armazenar dados na estrutura de fila (queue). 
+Sobre o docker compose:
+Se definirmos que o serviço irá utilizar uma imagem de build, então devemos passar o arquivo DockerCompose, nesse arquivo terá todos comandos necessário para instalar as dependências desse container e comandos necessários para montar o ambiente da forma correta.
+No build, o docker compose irá criar a imagem localmente a partir do docker compose, mas se definirmo que o serviço utilizará image, então o serviço irá utilizar uma imagem pronta definida no arquivo docker compose. Essa imagem pronta já conterá todo o ambiente configurado da forma correta para ter suporte à aplicação ou serviço que queremos usar.
+Em packages.json temos o nodemon que é um pacote utilizado pelo node para monitorar outros módulos ou arquivos js do backend, ele é responsável por detectar a alteração nos arquivos js e atualizar o servidor, você define quais arquivos js irão ser monitorados, e com isso o servidor será reinicializado quando alguma alteração neles forem detectadas.
+O "^" antes do número da versão do pacote indica que o npm irá instalar apenas o mesmo pacote acima da versão definida, mas que não irá passar do número principal da versão.
+Resumo do passo a passo para construir uma aplicação web segura, robusta, moderna e escalável:
+Criar um plano/diagrama explicando como irá funcionar a aplicação, regras de negócio, quais problemas essa aplicação deve resolver, requisitos necessários para por ela em produção etc...
+
+O arquivo db.js dentro do diretório services do framework express.js, serve apenas como módulo para fornecer uma camada de acesso ao serviço de banco de dados que está sendo executado localmente no servidor em um outro container. Assim ele pode ser importado pelo arquivo js que realmente implementa as funções que realizam as transações no banco de dados, como: INSERT, UPDATE e DELETE.
+
+A função dentro de um repository deve retornar apenas os dados necessários que serão enviados pelo controller.
+Cada container deve cerregar apenas as variáveis de ambiente necessárias para executar a aplicação.
+
+Existe a importação comum e a moderna, a moderna utiliza import, a comum usa require().
+
+Utilizar cache e eventos para atualizar a área de mensagens no forum do usuário.
+
+O projeto monorepo utiliza pnpm workspace para compartilhar módulos (pacotes) entre os containers que utilizam ele, dessa forma, não precisando fazer um cópia manual do mesmo módulo para o diretório do backend e frontend. Outras possibilidades de compartilhamento de módulos (mas que não é viável ou recomendada) é a utilização de volumes definidos no docker-compose.yaml, exemplo:
+
+Foca em utilizar uma arquitetura limpa e escalável, ideal para microserviços, utiliza arquitetura em camadas, e aplica os conceitos SOLID e clean code.
+Cada parte do sistema é isolada em containers separados, e os serviços e funcionalidades que cada um fornece são acessadas utilizadas através de um container local que realiza a função de proxy reverso, ou seja, recebe a requisição do usuário, e de acordo com a rota acessada definida na requisição do usuário, ele direciona ela para o container local responsável por lidar com ela, retornando a resposta adequada, exemplo: caso a requisição do usuário seja para "https://exemplo.com/api" o proxy reverso direciona ela para o container local identificado pelo nome de serviço dele definido no docker-compose, que pode ser "backend", dessa forma o proxy reverso tem a instrução de fazer: "proxy_pass http://backend:1026" repassando a requisição para o serviço de backend responsável por analisar a requisição, e obter o os dados necessários que estão tanto nos headers quanto no body da requisição, e dessa forma, o serviço de backend pode comunicar com por exemplo, o serviço de banco de dados, que faz o registro dos dados do usuário de formas adequado, e então retorna a resposta para o servidor proxy reverso, que então retorna para o usuário.
+Resumindo, o proxy reverso é responável repassar a requisição recebido, para o serviço do container local correto, de acordo com a rota acessada pelo usuário no site, definida no path da url.
+O docker-compose é um mini orquestrador simples e bem básico de containers, muito utilizado e suficente para pequenos sistemas e microserviços. Para sistemas maiores, são utilizados outros orquestradores de containers mais completos e com maior capacidade, como kubernets ou docker-swarm.
+
+Por este projeto?:
+nginx:
+node + express:
+nextjs:
+pnpm workspaces:
+conteinerização de serviços:
