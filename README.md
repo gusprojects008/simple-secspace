@@ -1,4 +1,3 @@
-````markdown
 # secspace
 
 A simple authenticated forum, developed with a focus on studying and practicing modern web development concepts.
