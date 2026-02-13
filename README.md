@@ -96,3 +96,13 @@ sudo docker-compose up --build
 ## Final notes
 
 This project prioritizes architectural clarity and understanding of the application's internal flows, even if this results in more verbose solutions than strictly necessary for a small project. The idea is to study consciously, not just to “make it work”.
+
+---
+
+For more details, see [docs](./docs/secspace.txt)
+
+---
+
+## License
+
+MIT License – see [LICENSE](LICENSE) for details.
