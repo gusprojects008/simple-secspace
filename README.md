@@ -99,7 +99,7 @@ This project prioritizes architectural clarity and understanding of the applicat
 
 ---
 
-For more details, see [docs](./docs/secspace.txt)
+For more details, see [docs](./docs/secspace.md)
 
 ---
 
